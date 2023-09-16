@@ -10,9 +10,9 @@ impl Db {
         Ok(Self { connection })
     }
 
-    pub async fn save_short_url(&self, url: &str) -> anyhow::Result<()> {
-        let mut qb = QueryBuilder::<Sqlite>::new("INSERT INTO short_urls(url) VALUES(");
-        let query = qb.push_bind(url).push(")").build();
+    pub async fn save_short_url(&self, short_code: &str, url: &str) -> anyhow::Result<()> {
+        let mut qb = QueryBuilder::<Sqlite>::new("INSERT INTO short_urls(short_code, url) VALUES(");
+        let query = qb.push_bind(short_code).push(", ").push_bind(url).push(")").build();
 
         query.execute(&self.connection).await?;
 
